@@ -1,0 +1,11 @@
+services:
+  minha-api:
+    build: .
+    ports:
+      - "5002:5002"
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    command: tunnel --no-autoupdate --url http://api-test:5002
+    depends_on:
+      - api-test
