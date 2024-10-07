@@ -1,11 +1,21 @@
+version: '3.8'
+
 services:
   minha-api:
     build: .
     ports:
       - "5002:5002"
+    networks:
+      - cloudflared-network
 
   cloudflared:
     image: cloudflare/cloudflared:latest
-    command: tunnel --no-autoupdate --url http://api-test:5002
+    command: tunnel --no-autoupdate --url http://minha-api:5002
     depends_on:
-      - api-test
+      - minha-api
+    networks:
+      - cloudflared-network
+
+networks:
+  cloudflared-network:
+    driver: bridge
